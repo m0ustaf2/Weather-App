@@ -1,0 +1,35 @@
+/* ****general**** */
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+body{
+    font-family:"Open Sans", sans-serif; 
+    width: 100%;
+    background-color: #090404;
+    
+}
+.wetherCity{
+    background-color: #3199ab ;
+  }
+  .fCard{
+    overflow: hidden ;
+  }
+  .toCard
+  {
+    overflow: hidden ;
+  }
+  .nxWetherCity{
+    background-color: #3199ab ;
+
+    transition: .3s;
+  }
+  .nxWetherCity:hover
+  {
+    background-color:#0b252b ;
+  }
+
+  #particles-js{
+    height: 200px;
+  }
