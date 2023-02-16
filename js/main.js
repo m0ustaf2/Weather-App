@@ -24,12 +24,13 @@ responseData;
 
 async function getWeatherData(currentCity="cairo")
 {
- apiResponse=await fetch(`http://api.weatherapi.com/v1/forecast.json?key=147beabdb34741f3ba7152747211309&q=${currentCity}&days=3`)
+ apiResponse=await fetch(`https://api.weatherapi.com/v1/forecast.json?key=147beabdb34741f3ba7152747211309&q=${currentCity}&days=3`)
  responseData=await apiResponse.json()
 console.log(responseData);
 
 displayToday()
 displayNextDayWeather()
+getCoordintes()
 }
 
 getWeatherData()
@@ -67,3 +68,52 @@ function displayNextDayWeather(){
   })
   
 
+// Step 1: Get user coordinates
+function getCoordintes() {
+	var options = {
+		enableHighAccuracy: true,
+		timeout: 5000,
+		maximumAge: 0
+	};
+
+	function success(pos) {
+		var crd = pos.coords;
+		var lat = crd.latitude.toString();
+		var lng = crd.longitude.toString();
+		var coordinates = [lat, lng];
+		console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+		getCity(coordinates);
+		return;
+
+	}
+
+	function error(err) {
+		console.warn(`ERROR(${err.code}): ${err.message}`);
+	}
+
+	navigator.geolocation.getCurrentPosition(success, error, options);
+}
+
+// Step 2: Get city name
+function getCity(coordinates) {
+	var xhr = new XMLHttpRequest();
+	var lat = coordinates[0];
+	var lng = coordinates[1];
+
+	// Paste your LocationIQ token below.
+	xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.90b250623f2bca09c8501b1466692673&lat=" +lat + "&lon=" + lng + "&format=json", true);
+	xhr.send();
+	xhr.onreadystatechange = processRequest;
+	xhr.addEventListener("readystatechange", processRequest, false);
+
+	function processRequest(e) {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var response = JSON.parse(xhr.responseText);
+			var city = response.address.city;
+			console.log(city);
+			return;
+		}
+	}
+}
+
+getCoordintes();
